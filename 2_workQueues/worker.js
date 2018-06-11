@@ -1,3 +1,7 @@
+// [Ack]: 當有consumer斷線 (做再久也不算，要真的斷)，RabbitMQ會將沒有ch.ack的messages重送到其它consumer
+// Note: Ack預設是true，很常會沒有要用卻忘記加上{noAck: false}
+// 這種情況下當然也不會寫ch.ack，導致messages雖然都有處理但是有consumer離線時又全部重送
+
 const amqp = require('amqplib/callback_api')
 
 amqp.connect('amqp://localhost', (err, conn) => {
@@ -12,7 +16,8 @@ amqp.connect('amqp://localhost', (err, conn) => {
       console.log(` [x] Received ${message.content.toString()}`)
       setTimeout(() => {
         console.log(' [x] Done')
+        ch.ack(message) // [Ack]: 通知RabbitMQ此message已順利完成
       }, secs * 1000)
-    }, {noAck: true})
+    }, {noAck: false}) // [Ack]: 啟動acknowledgment機制
   })
 })
