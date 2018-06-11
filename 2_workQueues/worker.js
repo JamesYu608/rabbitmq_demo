@@ -5,6 +5,9 @@
 // [Durability]: RabbitMQ server斷線 (或crash)，回復queue跟message (不完全保證，完全保證看文件)
 // 1. 確保queue是durable: 記得producer跟consumer都要
 // 2. 確保message是durable: consumer的send
+
+// [Prefetch]: 一次處理幾個tasks (在全部ch.ack前不會再拿tasks進來，打破round-robin dispatching)
+
 const amqp = require('amqplib/callback_api')
 
 amqp.connect('amqp://localhost', (err, conn) => {
@@ -12,6 +15,7 @@ amqp.connect('amqp://localhost', (err, conn) => {
     const queue = 'taskQueue'
 
     ch.assertQueue(queue, {durable: true}) // [Durable]: 確保queue是durable
+    ch.prefetch(1) // [Prefetch]: 一次處理一個
     console.log(` [*] Waiting for messages in ${queue}.`)
     ch.consume(queue, message => {
       // fake a second of work for every dot in the message body
