@@ -11,10 +11,10 @@ amqp.connect('amqp://localhost', (err, conn) => {
       'Fifth message.....',
     ]
 
-    ch.assertQueue(queue, {durable: true})
+    ch.assertQueue(queue, {durable: true}) // [Durable]: 確保queue是durable
 
     for (const message of messages) {
-      ch.sendToQueue(queue, new Buffer(message), {persistent: true})
+      ch.sendToQueue(queue, new Buffer(message), {persistent: true}) // [Durable] 確保message是durable
       console.log(` [x] Sent '${message}'`)
     }
   })
