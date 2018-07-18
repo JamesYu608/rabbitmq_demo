@@ -1,5 +1,6 @@
 // 這個demo要做一個broadcast的logging機制，一條message會同時發送到多個queues
 
+// [fanout exchange]
 // 先前都沒有提到exchange的概念，其實producer不會直接送message到queue，而是送到exchange
 // Exchange的功能是負責接收producer來的message，然後決定如何push到queue (e.g. push到多個queues)
 // 這個規則稱為exchange type，目前有: direct. topic, headers fanout，這邊以fanout做demo

@@ -1,3 +1,4 @@
+// [direct exchange]
 // 上一章使用fanout exchange推播給所有binding的queues
 // 這邊使用direct exchange，將指定exchange + routing key (severity) 的message
 // 送給指定exchange + "相同"binding key的queues，若都沒有符合的，則discard message
